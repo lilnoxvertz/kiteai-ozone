@@ -318,7 +318,7 @@ class KiteClient {
         const agent = proxy ? new HttpsProxyAgent(proxy) : undefined
         let cycle = 0
 
-        while (cycle < 20) {
+        while (cycle < 10) {
             cycle++
             const message = groqApi ? await GroqAi.getMessage() : prompt[randomPromptIndex]
             try {
