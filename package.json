@@ -1,0 +1,28 @@
+{
+  "name": "kitev2",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "x",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "register": "node ./src/main/register.js",
+    "interact": "node ./src/main/agent.js",
+    "quiz": "node ./src/main/dailyquiz.js",
+    "generate": "node ./src/main/generate.wallet.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "dotenv": "^16.5.0",
+    "ethers": "^6.14.1",
+    "groq-sdk": "^0.22.0",
+    "https-proxy-agent": "^7.0.6",
+    "moment-timezone": "^0.5.48",
+    "punycode": "^2.3.1",
+    "set-cookie-parser": "^2.7.1",
+    "undici": "^7.10.0",
+    "viem": "^2.30.0"
+  }
+}
