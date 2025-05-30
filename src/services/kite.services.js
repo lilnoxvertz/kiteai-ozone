@@ -401,11 +401,11 @@ class KiteClient {
                 })
             }
 
-            skibidi.warn(`${walletAddress} COMPLETED (${cycle}/20) CYCLES`)
+            skibidi.warn(`${walletAddress} COMPLETED (${cycle}/10) CYCLES`)
             await new Promise(resolve => setTimeout(resolve, 15000))
         }
 
-        skibidi.success(`${walletAddress} SUCCESSFULLY FINISHED (${cycle}/20) CYCLES`)
+        skibidi.success(`${walletAddress} SUCCESSFULLY FINISHED (${cycle}/10) CYCLES`)
         parentPort.postMessage({
             type: "done"
         })
