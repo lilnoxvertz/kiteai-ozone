@@ -23,5 +23,5 @@
    ```
 2. interacting with agent
    ```bash
-   npm run agent
+   npm run interact
    ```
