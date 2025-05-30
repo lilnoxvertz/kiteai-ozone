@@ -1,3 +1,4 @@
+## MAKE SURE ALL OF THE ADDRESS THAT YOU WILL USE ON THE BOT, HAS ALREADY BEEN REGISTERED MANUALLY FROM THE WEBSITE, OR ELSE THE BOT WON'T WORK
 ## SETUP
 
 1. install packages
@@ -5,7 +6,7 @@
    npm install
    ```
 2. set groq api key on .env if you have one.
-3. before pasting all of your private key on wallet.txt, MAKE SURE all of the account has already been registered manually from the web.
+3. paste private key on wallet.txt
 4. paste all of your proxy on proxy.txt. format should be either IP:PORT:USERNAME:PASSWORD or IP:PORT
 5. run the bot
 
