@@ -318,9 +318,9 @@ class KiteClient {
         const agent = proxy ? new HttpsProxyAgent(proxy) : undefined
         let cycle = 0
 
-        while (cycle < 20) {
+        while (cycle < 10) {
             cycle++
-            const message = groqApi ? await GroqAi.getMessage() : prompt[randomPromptIndex]
+            const message = groqApi ? await GroqAi.getQuestion() : prompt[randomPromptIndex]
             try {
                 skibidi.processing(`${walletAddress} IS SENDING A MESSAGE TO AGENT`)
                 const response = await fetch(url, {
@@ -401,11 +401,11 @@ class KiteClient {
                 })
             }
 
-            skibidi.warn(`${walletAddress} COMPLETED (${cycle}/20) CYCLES`)
+            skibidi.warn(`${walletAddress} COMPLETED (${cycle}/10) CYCLES`)
             await new Promise(resolve => setTimeout(resolve, 15000))
         }
 
-        skibidi.success(`${walletAddress} SUCCESSFULLY FINISHED (${cycle}/20) CYCLES`)
+        skibidi.success(`${walletAddress} SUCCESSFULLY FINISHED (${cycle}/10) CYCLES`)
         parentPort.postMessage({
             type: "done"
         })
