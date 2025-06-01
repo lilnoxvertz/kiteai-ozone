@@ -122,6 +122,43 @@ class Workers {
         })
     }
 
+    static async points(walletAddress, authToken, proxy) {
+        return new Promise((resolve, reject) => {
+            const worker = new Worker(path.resolve(__dirname, "./task/data.js"), {
+                workerData: {
+                    walletAddress: walletAddress,
+                    authToken: authToken,
+                    proxy: proxy
+                }
+            })
+
+            worker.on("message", (message) => {
+                if (message.type === "done") {
+                    resolve()
+                }
+
+                if (message.type === "success") {
+                    resolve()
+                }
+
+                if (message.type === "failed") {
+                    resolve()
+                }
+
+                if (message.type === "error") {
+                    reject(new Error(message.data))
+                }
+            })
+
+            worker.on("error", reject)
+            worker.on("exit", (code) => {
+                if (code !== 0) {
+                    reject(new Error("WORKER STOPPED"))
+                }
+            })
+        })
+    }
+
     static async limitTasks(tasks, limit) {
         const results = []
         let taskIndex = 0

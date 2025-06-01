@@ -1,4 +1,5 @@
 ## MAKE SURE ALL OF THE ADDRESS THAT YOU WILL USE ON THE BOT, HAS ALREADY BEEN REGISTERED MANUALLY FROM THE WEBSITE, OR ELSE THE BOT WON'T WORK
+
 ## SETUP
 
 1. install packages
@@ -24,4 +25,8 @@
 2. interacting with agent
    ```bash
    npm run interact
+   ```
+3. points and rank
+   ```bash
+   npm run data
    ```

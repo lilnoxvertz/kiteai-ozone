@@ -527,75 +527,85 @@ class KiteClient {
         return
     }
 
-    // static async getUserData(walletAddress, authToken, proxy) {
-    //     const agent = proxy ? new HttpsProxyAgent(proxy) : undefined
-    //     const url = "https://ozone-point-system.prod.gokite.ai/me"
-    //     const header = {
-    //         "Accept": "text/event-stream",
-    //         "Accept-Encoding": "gzip, deflate, br, zstd",
-    //         "Accept-Language": "en-US,en;q=0.9",
-    //         "Authorization": `Bearer ${authToken} `,
-    //         "Content-Type": "application/json",
-    //         "Origin": "https://testnet.gokite.ai",
-    //         "Pragma": "no-cache",
-    //         "Referer": "https://testnet.gokite.ai/",
-    //         "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Microsoft Edge\";v=\"136\", \"Not:A-Brand\";v=\"99\"",
-    //         "Sec-Ch-Ua-Mobile": "?0",
-    //         "Sec-Ch-Ua-Platform": "\"Windows\"",
-    //         "Sec-Fetch-Dest": "empty",
-    //         "Sec-Fetch-Mode": "cors",
-    //         "Sec-Fetch-Site": "same-site",
-    //         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0"
-    //     }
+    static async getUserData() {
+        const { walletAddress, authToken, proxy } = workerData
+        const agent = proxy ? new HttpsProxyAgent(proxy) : undefined
+        const url = "https://ozone-point-system.prod.gokite.ai/me"
+        const header = {
+            "Accept": "text/event-stream",
+            "Accept-Encoding": "gzip, deflate, br, zstd",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Authorization": `Bearer ${authToken} `,
+            "Content-Type": "application/json",
+            "Origin": "https://testnet.gokite.ai",
+            "Pragma": "no-cache",
+            "Referer": "https://testnet.gokite.ai/",
+            "Sec-Ch-Ua": "\"Chromium\";v=\"136\", \"Microsoft Edge\";v=\"136\", \"Not:A-Brand\";v=\"99\"",
+            "Sec-Ch-Ua-Mobile": "?0",
+            "Sec-Ch-Ua-Platform": "\"Windows\"",
+            "Sec-Fetch-Dest": "empty",
+            "Sec-Fetch-Mode": "cors",
+            "Sec-Fetch-Site": "same-site",
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36 Edg/136.0.0.0"
+        }
 
-    //     let data = false
-    //     let attempt = 0
-    //     const maxAttempt = 3
+        let data = false
+        let attempt = 0
+        const maxAttempt = 3
 
-    //     if (!data && attempt === maxAttempt) {
-    //         return {
-    //             status: false
-    //         }
-    //     }
+        if (!data && attempt === maxAttempt) {
+            skibidi.failed(`${walletAddress} REACHED MAX ATTEMPT. FAILED GETTING USER DATA`)
+            parentPort.postMessage({
+                type: "failed"
+            })
+        }
 
-    //     while (!data && attempt < maxAttempt) {
-    //         attempt++
-    //         try {
-    //             const response = await fetch(url, {
-    //                 method: "GET",
-    //                 headers: header,
-    //                 agent
-    //             })
+        while (!data && attempt < maxAttempt) {
+            attempt++
+            try {
+                const response = await fetch(url, {
+                    method: "GET",
+                    headers: header,
+                    agent
+                })
 
-    //             const result = await response.text()
+                const result = await response.json()
 
-    //             if (!response.ok) {
-    //                 console.log(timestamp(), log.failed, chalk.redBright(` ${walletAddress} FAILED GETTING USER DATA.RETRYING`))
-    //                 await new Promise(resolve => setTimeout(resolve, 20000))
-    //                 continue
-    //             }
+                if (!response.ok) {
+                    skibidi.failed(`${walletAddress} FAILED GETTING USER DATA. RETRYING (${attempt}/${maxAttempt})`)
+                    await new Promise(resolve => setTimeout(resolve, 20000))
+                    continue
+                }
 
+                const userId = result.data.profile.user_id
 
-    //             const userId = result?.data?.profile?.user_id
+                if (userId === "" || userId === null) {
+                    skibidi.failed(`${walletAddress} USER DATA IS NOT FOUND`)
+                    break
+                }
 
-    //             if (userId === "" || userId === null) {
-    //                 console.log(timestamp(), log.failed, chalk.redBright(` ${walletAddress} USER NOT EXIST!`))
-    //                 break
-    //             }
+                const point = result.data.profile.total_xp_points
+                const rank = result.data.profile.rank
 
-    //             data = true
-    //             console.log(timestamp(), log.success, chalk.redBright(` ${walletAddress} SUCCESSFULLY GETTING USER DATA`))
+                data = true
+                skibidi.success(`${walletAddress} SUCCESSFULLY RETRIEVING USER DATA`)
+                skibidi.warn(`${walletAddress}: rank ${rank} with ${point} points`)
 
-    //             return {
-    //                 status: true
-    //             }
-    //         } catch (error) {
-    //             console.error(timestamp(), chalk.redBright(` ${error} `))
-    //         }
-    //     }
+                parentPort.postMessage({
+                    type: "success"
+                })
+            } catch (error) {
+                skibidi.failed(walletAddress.error)
+                parentPort.postMessage({
+                    type: "error"
+                })
+            }
+        }
 
-    //     return
-    // }
+        parentPort.postMessage({
+            type: "done"
+        })
+    }
 }
 
 module.exports = KiteClient
