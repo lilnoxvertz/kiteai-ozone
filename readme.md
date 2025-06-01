@@ -18,6 +18,7 @@
 
 - Auto Quiz
 - Auto Interact with Agent
+- See your Points and Rank
 
 ## COMMAND
 
